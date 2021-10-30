@@ -13,13 +13,20 @@ spec:
         app: rabbitmq
     spec:
       containers:
-        - name: rabbitmq
-          image: rabbitmq:3-management
-          ports:
-            - containerPort: 15672
-              name: rbmq-mgmt-port
-            - containerPort: 5672
-              name: rbmq-msg-port
+      - name: rabbitmq
+        image: rabbitmq:3-management
+        ports:
+          - containerPort: 15672
+            name: rbmq-mgmt-port
+          - containerPort: 5672
+            name: rbmq-msg-port
+        volumeMounts:
+        - name: rbmq-data
+          mountPath: /var/lib/rabbitmq/mnesia
+      volumes:
+      - name: rbmq-data
+        persistentVolumeClaim:
+          claimName: rabbitmq-claim
 ---
 apiVersion: v1
 kind: Service
